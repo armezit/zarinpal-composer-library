@@ -124,8 +124,8 @@ class RestDriver implements DriverInterface
             $body = json_decode($rawBody, true);
         }
 
-        if (!isset($result['data']['code'])) {
-            $result['data']['code'] = -99;
+        if (!isset($body['data']['code'])) {
+            $body['data']['code'] = -99;
         }
 
         return $body;
