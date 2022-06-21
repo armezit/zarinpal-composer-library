@@ -82,7 +82,7 @@ class Zarinpal
         $inputs = [
             'merchant_id' => $this->merchantId,
             'authority'  => $authority,
-            'amount'     => $amount,
+            'amount'     => (int)$amount,
         ];
 
         return $this->driver->verify($inputs);
