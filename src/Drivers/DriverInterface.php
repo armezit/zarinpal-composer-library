@@ -7,16 +7,9 @@ interface DriverInterface
     /**
      * @param $inputs
      *
-     * @return array|redirect
+     * @return array
      */
     public function request($inputs);
-
-    /**
-     * @param $inputs
-     *
-     * @return array|redirect
-     */
-    public function requestWithExtra($inputs);
 
     /**
      * @param $inputs
@@ -24,13 +17,6 @@ interface DriverInterface
      * @return array
      */
     public function verify($inputs);
-
-    /**
-     * @param $inputs
-     *
-     * @return array
-     */
-    public function verifyWithExtra($inputs);
 
     /**
      * @param $inputs

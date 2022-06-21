@@ -21,9 +21,9 @@ class ZarinpalServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('Zarinpal', function () {
-            $merchantID = config('services.zarinpal.merchantID', config('Zarinpal.merchantID', 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'));
+            $merchantId = config('services.zarinpal.merchantID', config('Zarinpal.merchantID', 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'));
 
-            $zarinpal = new Zarinpal($merchantID, $this->app->make(DriverInterface::class));
+            $zarinpal = new Zarinpal($merchantId, $this->app->make(DriverInterface::class));
 
             if (config('services.zarinpal.sandbox', false)) {
                 $zarinpal->enableSandbox();

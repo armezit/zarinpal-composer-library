@@ -18,14 +18,14 @@ class RestTestCase extends \PHPUnit\Framework\TestCase
     public function testCorrectRequest()
     {
         $answer = $this->zarinpal->request('http://www.example.com/testVerify.php', 1000, 'testing');
-        $this->assertEquals(strlen($answer['Authority']), 36);
+        $this->assertEquals(strlen($answer['authority']), 36);
 
         // try and mock pay form
         try {
             $client = new Client();
             $response = $client->request(
                 'POST',
-                'https://sandbox.zarinpal.com/pg/transaction/pay/'.$answer['Authority'],
+                'https://sandbox.zarinpal.com/pg/transaction/pay/'.$answer['authority'],
                 [
                     'form_params' => [
                         'ok' => 'ok',
@@ -34,7 +34,7 @@ class RestTestCase extends \PHPUnit\Framework\TestCase
         } catch (Exception $e) {
         }
 
-        $answer = $this->zarinpal->verify(1000, $answer['Authority']);
+        $answer = $this->zarinpal->verify(1000, $answer['authority']);
         $this->assertEquals($answer['Status'], 'success');
         $this->assertEquals(strlen($answer['Status']), 7);
     }

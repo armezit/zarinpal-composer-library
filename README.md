@@ -37,12 +37,12 @@ $results = $zarinpal->request(
     ]
 );
 echo json_encode($results);
-if (isset($results['Authority'])) {
-    file_put_contents('Authority', $results['Authority']);
+if (isset($results['authority'])) {
+    file_put_contents('authority', $results['authority']);
     $zarinpal->redirect();
 }
 //it will redirect to zarinpal to do the transaction or fail and just echo the errors.
-//$results['Authority'] must save somewhere to do the verification
+//$results['authority'] must save somewhere to do the verification
 ```
 
 ### verify
@@ -50,7 +50,7 @@ if (isset($results['Authority'])) {
 use Zarinpal\Zarinpal;
 
 $zarinpal = new Zarinpal('XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');
-$authority = file_get_contents('Authority');
+$authority = file_get_contents('authority');
 echo json_encode($zarinpal->verify('OK', 1000, $authority));
 //'Status'(index) going to be 'success', 'error' or 'canceled'
 ```
@@ -97,10 +97,10 @@ $results = Zarinpal::request(
         ]
     ]
 );
-// save $results['Authority'] for verifying step
+// save $results['authority'] for verifying step
 Zarinpal::redirect(); // redirect user to zarinpal
 
-// after that verify transaction by that $results['Authority']
-Zarinpal::verify('OK',1000,$results['Authority']);
+// after that verify transaction by that $results['authority']
+Zarinpal::verify('OK',1000,$results['authority']);
 ```
 

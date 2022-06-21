@@ -7,17 +7,17 @@ use Zarinpal\Drivers\RestDriver;
 
 class Zarinpal
 {
-    private $redirectUrl = 'https://www.zarinpal.com/pg/StartPay/%u';
-    private $merchantID;
+    private $redirectUrl = 'https://www.zarinpal.com/pg/StartPay/%s';
+    private $merchantId;
     private $driver;
-    private $Authority;
+    private $authority;
 
-    public function __construct($merchantID, DriverInterface $driver = null)
+    public function __construct($merchantId, DriverInterface $driver = null)
     {
         if (is_null($driver)) {
             $driver = new RestDriver();
         }
-        $this->merchantID = $merchantID;
+        $this->merchantId = $merchantId;
         $this->driver = $driver;
     }
 
@@ -25,40 +25,39 @@ class Zarinpal
      * send request for money to zarinpal
      * and redirect if there was no error.
      *
-     * @param string $callbackURL
-     * @param string $Amount
-     * @param string $Description
-     * @param string $Email
-     * @param string $Mobile
-     * @param null   $additionalData
+     * @param string $callbackUrl
+     * @param int $amount
+     * @param string $description
+     * @param string|null $email
+     * @param string|null $mobile
+     * @param array|null   $metadata
      *
      * @return array|@redirect
      */
-    public function request($callbackURL, $Amount, $Description, $Email = null, $Mobile = null, $additionalData = null)
+    public function request($callbackUrl, $amount, $description, $email = null, $mobile = null, $metadata = null)
     {
         $inputs = [
-            'MerchantID'  => $this->merchantID,
-            'CallbackURL' => $callbackURL,
-            'Amount'      => $Amount,
-            'Description' => $Description,
+            'merchant_id'  => $this->merchantId,
+            'callback_url' => $callbackUrl,
+            'amount'      => (int)$amount,
+            'description' => $description,
         ];
-        if (!is_null($Email)) {
-            $inputs['Email'] = $Email;
+        if (!is_null($email)) {
+            $inputs['email'] = $email;
         }
-        if (!is_null($Mobile)) {
-            $inputs['Mobile'] = $Mobile;
+        if (!is_null($mobile)) {
+            $inputs['mobile'] = $mobile;
         }
-        if (!is_null($additionalData)) {
-            $inputs['AdditionalData'] = $additionalData;
-            $results = $this->driver->requestWithExtra($inputs);
-        } else {
-            $results = $this->driver->request($inputs);
+        if (!is_null($metadata)) {
+            $inputs['metadata'] = $metadata;
         }
 
-        if (empty($results['Authority'])) {
-            $results['Authority'] = null;
+        $results = $this->driver->request($inputs);
+
+        if (empty($results['authority'])) {
+            $results['authority'] = null;
         }
-        $this->Authority = $results['Authority'];
+        $this->authority = $results['authority'];
 
         return $results;
     }
@@ -81,17 +80,17 @@ class Zarinpal
         }
 
         $inputs = [
-            'MerchantID' => $this->merchantID,
-            'Authority'  => $authority,
-            'Amount'     => $amount,
+            'merchant_id' => $this->merchantId,
+            'authority'  => $authority,
+            'amount'     => $amount,
         ];
 
-        return $this->driver->verifyWithExtra($inputs);
+        return $this->driver->verify($inputs);
     }
 
     public function redirect()
     {
-        header('Location: '.sprintf($this->redirectUrl, $this->Authority));
+        header('Location: '.sprintf($this->redirectUrl, $this->authority));
         die;
     }
 
@@ -100,7 +99,7 @@ class Zarinpal
      */
     public function redirectUrl()
     {
-        return sprintf($this->redirectUrl, $this->Authority);
+        return sprintf($this->redirectUrl, $this->authority);
     }
 
     /**
@@ -116,7 +115,7 @@ class Zarinpal
      */
     public function enableSandbox()
     {
-        $this->redirectUrl = 'https://sandbox.zarinpal.com/pg/StartPay/%u';
+        $this->redirectUrl = 'https://sandbox.zarinpal.com/pg/StartPay/%s';
         $this->getDriver()->enableSandbox();
     }
 
